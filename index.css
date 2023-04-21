@@ -8,7 +8,7 @@ canvas,
   margin: 0 !important;
   height: 100%;
   width: 100%;
-  outline:0;
+  outline: 0;
 }
 
 #widgetTitle {
@@ -26,6 +26,33 @@ canvas,
 .esri-ui {
   overflow: visible;
   /*To show suggested location even if map has a width/heigh of 0% */
+}
+
+.loading {
+  position: fixed;
+  font-size: 30px;
+  top: 50%;
+  left: 50%;
+  /* transform: translate(-50%, -50%); */
+  animation: jump 1s infinite;
+}
+
+@keyframes jump {
+  0% {
+    transform: translate(-50%, -80%);
+  }
+  /* 20% {
+    transform: translate(-50%, -30%);
+  } */
+  50% {
+    transform: translate(-50%, -30%);
+  }
+  /* 80% {
+    transform: translate(-50%, -30%);
+  } */
+  100% {
+    transform: translate(-50%, -80%);
+  }
 }
 
 /* .esri-component {
