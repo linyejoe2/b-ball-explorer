@@ -3,12 +3,13 @@ require([
   "esri/views/MapView",
   "esri/Graphic",
   "esri/layers/GraphicsLayer",
+  "esri/layers/FeatureLayer",
   "esri/widgets/BasemapToggle",
   "esri/widgets/Popup",
   "esri/widgets/Home",
   "esri/widgets/Locate",
   "esri/widgets/Search"
-], function (Map, MapView, Graphic, GraphicsLayer, BasemapToggle, Popup, Home, Locate, Search) {
+], function (Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapToggle, Popup, Home, Locate, Search) {
 
   // 建立地圖
   var map = new Map({
@@ -49,9 +50,75 @@ require([
     }
   }), "top-left");
 
-  // 建立 GraphicsLayer 來顯示籃球場點位
-  var graphicsLayer = new GraphicsLayer();
-  map.add(graphicsLayer);
+  // 建立 featureLayer 來顯示籃球場點位
+  const featureLayer = new FeatureLayer({
+    fields: [{ name: "ObjectID", alias: "ObjectID", type: "oid" },
+    { name: "name", alias: "名稱", type: "string" },
+    { name: "address", alias: "地址", type: "string" },
+    { name: "team", alias: "主場隊伍", type: "string" },
+    { name: "league", alias: "所屬聯盟", type: "string" },
+    { name: "rentState", alias: "是否對外開放", type: "string" },
+    { name: "tel", alias: "聯絡該場館", type: "string" },
+    { name: "photo1", alias: "圖片", type: "string" }],
+    objectIdField: "ObjectID",
+    geometryType: "point",
+    spatialReference: {
+      wkid: 4326
+    },
+    source: [], // 空的圖層
+    renderer: {
+      type: "unique-value",
+      field: "league",
+      defaultSymbol: {
+        type: "simple-marker",
+        style: "circle",
+        color: [36, 153, 222, 0.7],
+        size: "16px"
+      },
+      uniqueValueInfos: [{
+          value: "T1 聯盟",
+      symbol: {
+        type: "picture-marker",
+        url: "img/t1league.svg",
+        width: "50px",
+        height: "50px"
+      }
+        }
+        // Add more unique values and symbols as needed
+      ]
+    },
+    // featureReduction: {
+    //   type: "cluster"
+    // },
+    popupTemplate: {
+      title: "{name}",
+      content: [
+        {
+          type: "media",
+          mediaInfos: [
+            {
+              type: "image",
+              value: {
+                sourceURL: "{photo1}",
+                linkURL: "{photo1}",
+              },
+            },
+          ],
+        },
+        {
+          type: "fields",
+          fieldInfos: [
+            { fieldName: "address", label: "地址", },
+            { fieldName: "team", label: "主場隊伍", },
+            { fieldName: "league", label: "所屬聯盟", },
+            { fieldName: "rentState", label: "是否對外開放", },
+            { fieldName: "tel", label: "聯絡該場館", },
+          ],
+        },
+      ],
+    },
+  });
+  map.add(featureLayer);
 
   // 顯示載入中提示
   const loadingDiv = document.createElement("div");
@@ -63,6 +130,7 @@ require([
   fetch("https://script.google.com/macros/s/AKfycbz8dfD4bGT6NYSls3LOfsr6Gz3b3Fm3iJUyI8o_Z-axrSsQtyFhXASHoz3GZU0XkklgPw/exec")
     .then(response => response.json())
     .then(data => {
+      let graphArr = [];
       data.locations.forEach(function (feature) {
         var graphic = new Graphic({
           geometry: {
@@ -76,89 +144,59 @@ require([
             "team": feature.team,
             "league": feature.league,
             "rentState": feature.rent_state,
-            "tel": feature.tel
+            "tel": feature.tel,
+            "photo1": feature.photo1
           },
-          popupTemplate: {
-            title: feature.name,
-            content: [
-              {
-                type: "media",
-                mediaInfos: [
-                  {
-                    type: "image",
-                    value: {
-                      sourceURL: feature.photo1,
-                      linkURL: feature.photo1,
-                    },
-                  },
-                ],
-              },
-              {
-                type: "fields",
-                fieldInfos: [
-                  {
-                    fieldName: "address",
-                    label: "地址",
-                  },
-                  {
-                    fieldName: "team",
-                    label: "主場隊伍",
-                  },
-                  {
-                    fieldName: "league",
-                    label: "所屬聯盟",
-                  },
-                  {
-                    fieldName: "rentState",
-                    label: "是否對外開放",
-                  },
-                  {
-                    fieldName: "tel",
-                    label: "聯絡該場館",
-                  },
-                ],
-              },
-            ],
-          },
-        });
-        graphicsLayer.add(graphic);
 
-        // 移除載入中提示
-        loadingDiv.remove();
+        });
+        graphArr.push(graphic);
       });
+
+      featureLayer.applyEdits({
+        addFeatures: graphArr
+      });
+
+      // 移除載入中提示
+      loadingDiv.remove();
     });
 
   // // 創建一個 Search widget
-  // const searchWidget = new Search({
-  //   view: view,
-  //   allPlaceholder: "搜尋籃球場名稱",
-  //   includeDefaultSources: false,
-  //   sources: [{
-  //     layer: graphicsLayer,
-  //     placeholder: "搜尋籃球場名稱",
-  //     maxResults: 5,
-  //     searchFields: ["name"],
-  //     displayField: "name",
-  //     name: "搜尋籃球場名稱",
-  //     // filter: searchExtent
-  //   }],
-  //   locationEnabled: false
-  // });
-  // view.ui.add(searchWidget, {
-  //   position: "top-right",
-  //   index: 2
-  // });
+  const searchWidget = new Search({
+    view: view,
+    allPlaceholder: "搜尋籃球場名稱",
+    includeDefaultSources: false,
+    sources: [{
+      layer: featureLayer,
+      placeholder: "搜尋籃球場名稱",
+      maxResults: 5,
+      searchFields: ["name"],
+      displayField: "name",
+      name: "搜尋籃球場名稱",
+      // filter: searchExtent
+    }],
+    locationEnabled: false
+  });
+  view.ui.add(searchWidget, {
+    position: "top-right",
+    index: 2
+  });
 
-
+  searchWidget.on("select-result", (event)=>{
+    console.log(event)
+    view.goTo({
+      target: event.result.feature,
+      zoom: 15
+    }, { duration: 2000 });
+  })
 
   // 監聽點擊事件，彈出 Popup 顯示籃球場資訊
   view.on("click", function (event) {
     view.hitTest(event).then(function (response) {
       var graphic = response.results[0].graphic;
-      if (graphic.attributes.name) {
+      if (graphic.layer === featureLayer) {
         view.goTo({
           target: graphic,
-          zoom: 17
+          zoom: 15
         }, { duration: 2000 });
       }
     });
