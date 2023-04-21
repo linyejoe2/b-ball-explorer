@@ -33,23 +33,21 @@ require([
   });
 
   // 建立底圖切換器
-  var toggle = new BasemapToggle({
+  view.ui.add(new BasemapToggle({
     view: view,
     nextBasemap: "osm", // 切換後的底圖
     container: document.createElement("div")
-  });
-  view.ui.add(toggle, "bottom-left");
+  }), "bottom-left");
 
   // 建立回初始畫面工具
-  let homeWidget = new Home({
-    view: view
-  });
-  // 讓回初始畫面的動畫更司滑
-  homeWidget.goToOverride = function (view, goToParams) {
-    goToParams.options.duration = 2000;
-    return view.goTo(goToParams.target, goToParams.options);
-  };
-  view.ui.add(homeWidget, "top-left");
+  view.ui.add(new Home({
+    view: view,
+    // 讓回初始畫面的動畫更司滑
+    goToOverride: function (view, goToParams) {
+      goToParams.options.duration = 2000;
+      return view.goTo(goToParams.target, goToParams.options);
+    }
+  }), "top-left");
 
   // 建立 GraphicsLayer 來顯示籃球場點位
   var graphicsLayer = new GraphicsLayer();
@@ -121,15 +119,6 @@ require([
                 ],
               },
             ],
-            //   content:
-            //     `
-            //   <b>地址：</b> ${feature.address} <br>
-            //   <b>主場隊伍：</b> ${feature.team} <br>
-            //   <b>所屬聯盟：</b> ${feature.league} <br>
-            //   <b>是否對外開放：</b> ${feature.rent_state} <br>
-            //   <b>聯絡該場館：</b> ${feature.tel} <br>
-            //   <img src="${feature.photo1}" alt="圖片">
-            // `,
           },
         });
         graphicsLayer.add(graphic);
@@ -167,12 +156,6 @@ require([
     view.hitTest(event).then(function (response) {
       var graphic = response.results[0].graphic;
       if (graphic.attributes.name) {
-        // view.popup.open({
-        //   title: graphic.attributes.name,
-        //   content: "<b>地址：</b>" + graphic.attributes.address + "<br><b>主場隊伍：</b>" + graphic.attributes.team + "<br>" +
-        //     "<b>所屬聯盟：</b>" + graphic.attributes.league,
-        //   location: event.mapPoint
-        // });
         view.goTo({
           target: graphic,
           zoom: 17
@@ -185,9 +168,19 @@ require([
   view.ui.add(new Locate({
     view: view,   // Attaches the Locate button to the view
     graphic: new Graphic({
-      symbol: { type: "simple-marker" }  // overwrites the default symbol used for the
+      // symbol: { type: "simple-marker" }  
+      symbol: {
+        type: "simple-marker",
+        style: "circle",
+        color: [36, 153, 222, 0.7],
+        size: "16px"
+      }
       // graphic placed at the location of the user when found
-    })
+    }),
+    goToOverride: function (view, goToParams) {
+      goToParams.options.duration = 2000;
+      return view.goTo(goToParams.target, goToParams.options);
+    }
   }), { position: "top-left", index: 1 });
 
 });
