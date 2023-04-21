@@ -58,6 +58,8 @@ require([
     { name: "team", alias: "主場隊伍", type: "string" },
     { name: "league", alias: "所屬聯盟", type: "string" },
     { name: "rentState", alias: "是否對外開放", type: "string" },
+    { name: "rentMemo", alias: "租借規則", type: "string" },
+    { name: "rentUrl", alias: "場館官網", type: "string" },
     { name: "tel", alias: "聯絡該場館", type: "string" },
     { name: "photo1", alias: "圖片", type: "string" }],
     objectIdField: "ObjectID",
@@ -69,21 +71,23 @@ require([
     renderer: {
       type: "unique-value",
       field: "league",
+      orderByClassesEnabled: true,
       defaultSymbol: {
         type: "simple-marker",
         style: "circle",
         color: [36, 153, 222, 0.7],
         size: "16px"
       },
-      uniqueValueInfos: [{
+      uniqueValueInfos: [
+        {
           value: "T1 聯盟",
-      symbol: {
-        type: "picture-marker",
-        url: "img/t1league.svg",
-        width: "50px",
-        height: "50px"
-      }
-        }
+          symbol: {
+            type: "picture-marker",
+            url: "img/t1league.svg",
+            width: "50px",
+            height: "50px"
+          }
+        },
         // Add more unique values and symbols as needed
       ]
     },
@@ -108,12 +112,18 @@ require([
         {
           type: "fields",
           fieldInfos: [
-            { fieldName: "address", label: "地址", },
-            { fieldName: "team", label: "主場隊伍", },
-            { fieldName: "league", label: "所屬聯盟", },
-            { fieldName: "rentState", label: "是否對外開放", },
-            { fieldName: "tel", label: "聯絡該場館", },
+            { fieldName: "address", label: "地址", visible: "{address}" !== "" },
+            { fieldName: "team", label: "主場隊伍", visible: "{team}" !== "" },
+            { fieldName: "league", label: "所屬聯盟", visible: "{league}" !== "" },
+            { fieldName: "rentState", label: "是否對外開放", visible: "{rentState}" !== "" },
+            // { fieldName: "rentMemo", label: "租借規則", },
+            { fieldName: "rentUrl", label: "場館網站", visible: "{rentUrl}" !== "" },
+            { fieldName: "tel", label: "聯絡該場館", visible: "{tel}" !== "" },
           ],
+        },
+        {
+          type: "text",
+          text: "<h2>租借規則</h2><br>" + "{rentMemo}"
         },
       ],
     },
@@ -145,7 +155,9 @@ require([
             "league": feature.league,
             "rentState": feature.rent_state,
             "tel": feature.tel,
-            "photo1": feature.photo1
+            "photo1": feature.photo1,
+            "rentMemo": feature.rent_memo,
+            "rentUrl": feature.rent_url
           },
 
         });
@@ -181,7 +193,7 @@ require([
     index: 2
   });
 
-  searchWidget.on("select-result", (event)=>{
+  searchWidget.on("select-result", (event) => {
     console.log(event)
     view.goTo({
       target: event.result.feature,
