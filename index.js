@@ -1,3 +1,5 @@
+let view;
+
 require([
   "esri/Map",
   "esri/views/MapView",
@@ -19,10 +21,10 @@ require([
   });
 
   // 建立地圖視圖
-  var view = new MapView({
+  view = new MapView({
     container: "viewDiv",
     map: map,
-    center: [120.960515, 23.69781],
+    center: [120.960515, 23.86781],
     zoom: 7,
     popup: {
       dockEnabled: true,
@@ -73,10 +75,14 @@ require([
       field: "league",
       orderByClassesEnabled: true,
       defaultSymbol: {
-        type: "simple-marker",
-        style: "circle",
-        color: [36, 153, 222, 0.7],
-        size: "16px"
+        type: "picture-marker",
+        url: "img/basketball.png",
+        width: "15px",
+        height: "15px"
+        // type: "simple-marker",
+        // style: "circle",
+        // color: [36, 153, 222, 0.7],
+        // size: "16px"
       },
       uniqueValueInfos: [
         {
@@ -233,4 +239,14 @@ require([
     }
   }), { position: "top-left", index: 1 });
 
+  /**
+   * @param {string} CourtName 
+   * @description 跟 schedule 做連結，點 Schedule 時會導向到該場館位置
+   */
+  function locateToCourt(CourtName) {
+    console.log(CourtName);
+  }
+
 });
+
+export { view };

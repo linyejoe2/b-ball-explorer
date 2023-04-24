@@ -2,10 +2,18 @@
 
 html,
 body,
-canvas,
+canvas {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100%;
+  width: 100%;
+  outline: 0;
+}
+
 #viewDiv {
   padding: 0 !important;
   margin: 0 !important;
+  /* height: calc(100% - 110px); */
   height: 100%;
   width: 100%;
   outline: 0;
@@ -25,6 +33,7 @@ canvas,
 
 .esri-ui {
   overflow: visible;
+  z-index: 20;
   /*To show suggested location even if map has a width/heigh of 0% */
 }
 
@@ -41,12 +50,14 @@ canvas,
   0% {
     transform: translate(-50%, -80%);
   }
+
   /* 20% {
     transform: translate(-50%, -30%);
   } */
   50% {
     transform: translate(-50%, -30%);
   }
+
   /* 80% {
     transform: translate(-50%, -30%);
   } */
@@ -55,6 +66,80 @@ canvas,
   }
 }
 
-/* .esri-component {
-  width: 900px; 
-} */
+.schedule-box {
+  margin-top: 10px;
+  position: fixed;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .schedule-box {
+    margin-top: 57px;
+  }
+}
+
+.schedule-col {
+  height: 110px;
+}
+
+.schedule {
+  padding-left: 60px;
+  padding-right: 600px;
+  width: calc(100% - 0px);
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.schedule::-webkit-scrollbar {
+  display: none;
+}
+
+.game {
+  margin-right: 5px;
+  background-color: #fff;
+  transition: background-color 125ms ease-in-out;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: #6e6e6e;
+  height: inherit;
+  width: 240px;
+  text-align: left;
+  display: inline-block;
+  padding: 8px 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  /* border-top: 0;
+  border-bottom: 0;
+  border-left: 0; */
+  /* border-style: solid; */
+  /* border: 1px solid rgb(46, 46, 46); */
+}
+
+.date {
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0;
+  font-family: "Satoshi", "Noto Sans TC";
+  font-weight: 700;
+}
+
+.game-id, .team {
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0;
+  font-family: "Satoshi", "Noto Sans TC";
+  font-weight: 400;
+}
+
+.location {
+  margin-top: 3px;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0;
+  font-family: "Satoshi", "Noto Sans TC";
+  font-weight: 400;
+  color: rgb(47, 47, 47);
+}
