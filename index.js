@@ -10,8 +10,9 @@ require([
   "esri/widgets/Popup",
   "esri/widgets/Home",
   "esri/widgets/Locate",
+  "esri/widgets/LayerList",
   "esri/widgets/Search"
-], function (Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapToggle, Popup, Home, Locate, Search) {
+], function (Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapToggle, Popup, Home, Locate, LayerList, Search) {
 
   // 建立地圖
   var map = new Map({
@@ -28,9 +29,15 @@ require([
     zoom: 7,
     popup: {
       dockEnabled: true,
+      collapseEnabled: false,
+      maxInlineActions: null,
       dockOptions: {
         buttonEnabled: false,
-        breakpoint: false
+        breakpoint: false,
+        // breakpoint: {
+        //   width: 600,
+        //   height: 400
+        // }
       }
     }
   });
@@ -47,7 +54,7 @@ require([
     view: view,
     // 讓回初始畫面的動畫更司滑
     goToOverride: function (view, goToParams) {
-      goToParams.options.duration = 2000;
+      goToParams.options.duration = 1000;
       return view.goTo(goToParams.target, goToParams.options);
     }
   }), "top-left");
@@ -75,14 +82,18 @@ require([
       field: "league",
       orderByClassesEnabled: true,
       defaultSymbol: {
-        type: "picture-marker",
-        url: "img/basketball.png",
-        width: "15px",
-        height: "15px"
-        // type: "simple-marker",
-        // style: "circle",
-        // color: [36, 153, 222, 0.7],
-        // size: "16px"
+        // type: "picture-marker",
+        // url: "img/basketball.png",
+        // width: "15px",
+        // height: "15px"
+        type: "simple-marker",
+        style: "circle",
+        color: "#32B3EB",
+        outline: {
+          color: "#65D0FE",
+          width: "1px"
+        },
+        size: "16px"
       },
       uniqueValueInfos: [
         {
@@ -94,7 +105,15 @@ require([
             height: "50px"
           }
         },
-        // Add more unique values and symbols as needed
+        {
+          value: "P. LEAGUE+",
+          symbol: {
+            type: "picture-marker",
+            url: "img/pleague.png",
+            width: "50px",
+            height: "50px"
+          }
+        },
       ]
     },
     // featureReduction: {
@@ -102,6 +121,7 @@ require([
     // },
     popupTemplate: {
       title: "{name}",
+      collapseEnablejd: false,
       content: [
         {
           type: "media",
@@ -127,10 +147,10 @@ require([
             { fieldName: "tel", label: "聯絡該場館", visible: "{tel}" !== "" },
           ],
         },
-        {
-          type: "text",
-          text: "<h2>租借規則</h2><br>" + "{rentMemo}"
-        },
+        // {
+        //   type: "text",
+        //   text: "<h2>租借規則</h2><br>" + "{rentMemo}"
+        // },
       ],
     },
   });
@@ -229,7 +249,11 @@ require([
         type: "simple-marker",
         style: "circle",
         color: [36, 153, 222, 0.7],
-        size: "16px"
+        size: "30px",
+        outline: {
+          color: "#BAD8E4",
+          width: "20px"
+        }
       }
       // graphic placed at the location of the user when found
     }),
@@ -238,14 +262,6 @@ require([
       return view.goTo(goToParams.target, goToParams.options);
     }
   }), { position: "top-left", index: 1 });
-
-  /**
-   * @param {string} CourtName 
-   * @description 跟 schedule 做連結，點 Schedule 時會導向到該場館位置
-   */
-  function locateToCourt(CourtName) {
-    console.log(CourtName);
-  }
 
 });
 
