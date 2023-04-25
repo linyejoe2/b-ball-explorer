@@ -10,8 +10,9 @@ require([
   "esri/widgets/Popup",
   "esri/widgets/Home",
   "esri/widgets/Locate",
+  "esri/widgets/LayerList",
   "esri/widgets/Search"
-], function (Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapToggle, Popup, Home, Locate, Search) {
+], function (Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapToggle, Popup, Home, Locate, LayerList, Search) {
 
   // 建立地圖
   var map = new Map({
@@ -53,7 +54,7 @@ require([
     view: view,
     // 讓回初始畫面的動畫更司滑
     goToOverride: function (view, goToParams) {
-      goToParams.options.duration = 2000;
+      goToParams.options.duration = 1000;
       return view.goTo(goToParams.target, goToParams.options);
     }
   }), "top-left");
@@ -81,14 +82,18 @@ require([
       field: "league",
       orderByClassesEnabled: true,
       defaultSymbol: {
-        type: "picture-marker",
-        url: "img/basketball.png",
-        width: "15px",
-        height: "15px"
-        // type: "simple-marker",
-        // style: "circle",
-        // color: [36, 153, 222, 0.7],
-        // size: "16px"
+        // type: "picture-marker",
+        // url: "img/basketball.png",
+        // width: "15px",
+        // height: "15px"
+        type: "simple-marker",
+        style: "circle",
+        color: "#32B3EB",
+        outline: {
+          color: "#65D0FE",
+          width: "1px"
+        },
+        size: "16px"
       },
       uniqueValueInfos: [
         {
@@ -244,7 +249,11 @@ require([
         type: "simple-marker",
         style: "circle",
         color: [36, 153, 222, 0.7],
-        size: "16px"
+        size: "30px",
+        outline: {
+          color: "#BAD8E4",
+          width: "20px"
+        }
       }
       // graphic placed at the location of the user when found
     }),
@@ -253,14 +262,6 @@ require([
       return view.goTo(goToParams.target, goToParams.options);
     }
   }), { position: "top-left", index: 1 });
-
-  /**
-   * @param {string} CourtName 
-   * @description 跟 schedule 做連結，點 Schedule 時會導向到該場館位置
-   */
-  function locateToCourt(CourtName) {
-    console.log(CourtName);
-  }
 
 });
 

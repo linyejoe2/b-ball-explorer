@@ -126,7 +126,8 @@ canvas {
   font-weight: 700;
 }
 
-.game-id, .team {
+.game-id,
+.team {
   font-size: 14px;
   line-height: 21px;
   letter-spacing: 0;
@@ -142,4 +143,71 @@ canvas {
   font-family: "Satoshi", "Noto Sans TC";
   font-weight: 400;
   color: rgb(47, 47, 47);
+}
+
+/* 預設隱藏浮現的 div */
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #6e6e6e;
+  z-index: 999;
+  animation: show 0.5s normal;
+}
+
+.overlay>.row {
+  height: 100%;
+  margin: 0;
+}
+
+.map-col {
+  border: 2px solid #3e3e3e;
+  border-top: 0;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.overlay .col-6 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.overlay p {
+  margin: 0;
+  margin-top: 5px;
+}
+
+.overlay i {
+  position: relative;
+  left: calc(50% - 18px);
+}
+
+@keyframes show {
+  from {
+    height: 0%;
+    width: 0;
+    top: 50%;
+    left: 50%;
+  }
+
+  to {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+
+/* 調整浮現的 div 中左右兩邊的寬度 */
+@media (min-width: 768px) {
+  .overlay .col-6 {
+    width: 50%;
+  }
 }

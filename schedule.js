@@ -38,26 +38,82 @@ fetch("https://api.t1league.basketball/season/2/matches").then(res => res.json()
     teamElement.classList.add('team');
     locationElement.classList.add('location');
 
-    // 設定 gameElement 的 click 事件
-    gameElement.onclick = (ele, ele2) => {
-      // location ? locateToCourt(location) : false
+    // 設定跟 overlay 有關的東西
+    (() => {
+      const overlayElement =
+        `<div class="overlay">
+        <div class="row">
+          <div class="col-6 map-col" href="#">
+            <div>
+              <i class="fa-regular fa-map fa-2xl"></i>
+              <p>地圖查看</p>
+            </div>
+          </div>` +
+        (game.meta ? `<div class="col-6 buy-col">
+            <div>
+              <i class="fa-brands fa-youtube fa-2xl"></i>
+              <p>觀看直播</p>
+            </div>
+          </div>` : `<div class="col-6 buy-col">
+            <div>
+              <i class="fa-regular fa-credit-card fa-2xl"></i>
+              <p>線上購票</p>
+            </div>
+          </div>`) +
+        `</div>
+      </div>`;
 
-      const t1CourtMap = {
-        臺體大體育館: [120.68994397939694, 24.151399541168043],
-        天母體育館: [121.53477862481277, 25.116123294033123],
-        嘉南藥理大學紹宗體育館: [120.22977964038311, 22.92320241041931],
-        新莊體育館: [121.45185875392662, 25.040705688059862],
-        高雄巨蛋: [120.30272039612913, 22.669078279436306],
-        國體大綜合體育館: [121.38351678782385, 25.034886112999867],
-      };
+      gameElement.innerHTML = overlayElement;
 
-      if (!location || !t1CourtMap[location]) return false;
+      // 在滑鼠移入時顯示浮現的 div
+      gameElement.addEventListener("mouseenter", function () {
+        const overlay = gameElement.querySelector(".overlay");
+        overlay.style.display = "block";
+      });
 
-      view.goTo({
-        center: t1CourtMap[location],
-        zoom: 15
-      }, { duration: 2000 });
-    }
+      // 在滑鼠移出時隱藏浮現的 div
+      gameElement.addEventListener("mouseleave", function () {
+        const overlay = gameElement.querySelector(".overlay");
+        overlay.style.display = "none";
+      });
+
+      // 在手機裝置上點擊時顯示或隱藏浮現的 div
+      gameElement.addEventListener("click", function () {
+        const overlay = gameElement.querySelector(".overlay");
+        if (overlay.style.display === "block") {
+          overlay.style.display = "none";
+        } else {
+          overlay.style.display = "block";
+        }
+      });
+
+      // 左邊地圖點擊事件
+      gameElement.querySelector(".map-col").onclick = (ele, ele2) => {
+
+        const t1CourtMap = {
+          臺體大體育館: [120.68994397939694, 24.151399541168043],
+          天母體育館: [121.53477862481277, 25.116123294033123],
+          嘉南藥理大學紹宗體育館: [120.22977964038311, 22.92320241041931],
+          新莊體育館: [121.45185875392662, 25.040705688059862],
+          高雄巨蛋: [120.30272039612913, 22.669078279436306],
+          國體大綜合體育館: [121.38351678782385, 25.034886112999867],
+        };
+
+        if (!location || !t1CourtMap[location]) return false;
+
+        view.goTo({
+          center: t1CourtMap[location],
+          zoom: 15
+        }, { duration: 2000 });
+      }
+
+      // 右邊立即購票點集事件
+      gameElement.querySelector(".buy-col").onclick = () => {
+        game.meta ?
+          window.open(game.meta.live_stream_url, "_blank") :
+          window.open("https://www.famiticket.com.tw/Home/Activity/Search/S01/002", "_blank");
+      }
+    })();
 
     // 將 HTML 元素加入到 schedule div 裡
     gameElement.appendChild(dateElement);
@@ -68,11 +124,16 @@ fetch("https://api.t1league.basketball/season/2/matches").then(res => res.json()
   });
 });
 
+function overlaySetup() {
+
+}
+
 
 window.onload = function () {
   const scheduleToggle = document.createElement("div");
 
   scheduleToggle.classList.add("esri-component", "esri-home", "esri-widget--button", "esri-widget")
+  scheduleToggle.setAttribute("title", "關閉 T1 賽程");
 
   const icon = document.createElement("img");
   icon.src = "img/t1leagueoutline.svg";
