@@ -28,9 +28,15 @@ require([
     zoom: 7,
     popup: {
       dockEnabled: true,
+      collapseEnabled: false,
+      maxInlineActions: null,
       dockOptions: {
         buttonEnabled: false,
-        breakpoint: false
+        breakpoint: false,
+        // breakpoint: {
+        //   width: 600,
+        //   height: 400
+        // }
       }
     }
   });
@@ -94,7 +100,15 @@ require([
             height: "50px"
           }
         },
-        // Add more unique values and symbols as needed
+        {
+          value: "P. LEAGUE+",
+          symbol: {
+            type: "picture-marker",
+            url: "img/pleague.png",
+            width: "50px",
+            height: "50px"
+          }
+        },
       ]
     },
     // featureReduction: {
@@ -102,6 +116,7 @@ require([
     // },
     popupTemplate: {
       title: "{name}",
+      collapseEnablejd: false,
       content: [
         {
           type: "media",
@@ -127,10 +142,10 @@ require([
             { fieldName: "tel", label: "聯絡該場館", visible: "{tel}" !== "" },
           ],
         },
-        {
-          type: "text",
-          text: "<h2>租借規則</h2><br>" + "{rentMemo}"
-        },
+        // {
+        //   type: "text",
+        //   text: "<h2>租借規則</h2><br>" + "{rentMemo}"
+        // },
       ],
     },
   });
