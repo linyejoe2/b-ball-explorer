@@ -1,4 +1,7 @@
 import { view } from '../index.js';
+import { getCourtLocation } from './const.js';
+
+
 
 async function getT1Schedule() {
   return new Promise((res, err) => {
@@ -91,20 +94,8 @@ async function getT1Schedule() {
 
           // 左邊地圖點擊事件
           gameElement.querySelector(".map-col").onclick = (ele, ele2) => {
-
-            const t1CourtMap = {
-              臺體大體育館: [120.68994397939694, 24.151399541168043],
-              天母體育館: [121.53477862481277, 25.116123294033123],
-              嘉南藥理大學紹宗體育館: [120.22977964038311, 22.92320241041931],
-              新莊體育館: [121.45185875392662, 25.040705688059862],
-              高雄巨蛋: [120.30272039612913, 22.669078279436306],
-              國體大綜合體育館: [121.38351678782385, 25.034886112999867],
-            };
-
-            if (!location || !t1CourtMap[location]) return false;
-
             view.goTo({
-              center: t1CourtMap[location],
+              center: getCourtLocation(location),
               zoom: 15
             }, { duration: 2000 });
           }
@@ -223,19 +214,11 @@ async function getSBLSchedule() {
           // 左邊地圖點擊事件
           gameElement.querySelector(".map-col").onclick = (ele, ele2) => {
 
-            const t1CourtMap = {
-              臺體大體育館: [120.68994397939694, 24.151399541168043],
-              天母體育館: [121.53477862481277, 25.116123294033123],
-              嘉南藥理大學紹宗體育館: [120.22977964038311, 22.92320241041931],
-              新莊體育館: [121.45185875392662, 25.040705688059862],
-              高雄巨蛋: [120.30272039612913, 22.669078279436306],
-              國體大綜合體育館: [121.38351678782385, 25.034886112999867],
-            };
-
-            if (!location || !t1CourtMap[location]) return false;
+            let courtlocation = getCourtLocation(location);
+            if (!courtlocation) console.log("no court data: " + courtlocation);
 
             view.goTo({
-              center: t1CourtMap[location],
+              center: courtlocation,
               zoom: 15
             }, { duration: 2000 });
           }
@@ -266,24 +249,8 @@ async function setSchedule() {
   const scheduleDiv = document.querySelector('.schedule');
   let schedule = await getT1Schedule();
   schedule = schedule.concat(await getSBLSchedule());
-
-  // schedule = schedule.sort((a, b) => {
-  //   if (a[0] > b[0]) {
-  //     return b;
-  //   } else if (a[0] < b[0]) {
-  //     return a;
-  //   } else {
-  //     if (a[1] > b[1]) {
-  //       return b;
-  //     } else return a;
-  //   }
-  // });
-
   schedule.sort();
-
   schedule.forEach(ele => {
-    // 取得 schedule div
-
     scheduleDiv.appendChild(ele[2]);
   });
 };
