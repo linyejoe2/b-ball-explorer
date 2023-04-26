@@ -100,7 +100,7 @@ require([
           value: "T1 聯盟",
           symbol: {
             type: "picture-marker",
-            url: "img/t1league.svg",
+            url: "img/team/t1league.svg",
             width: "50px",
             height: "50px"
           }
@@ -109,7 +109,7 @@ require([
           value: "P. LEAGUE+",
           symbol: {
             type: "picture-marker",
-            url: "img/pleague.png",
+            url: "img/team/pleague.png",
             width: "50px",
             height: "50px"
           }
