@@ -78,12 +78,14 @@ fetch("https://api.t1league.basketball/season/2/matches").then(res => res.json()
       });
 
       // 在手機裝置上點擊時顯示或隱藏浮現的 div
-      gameElement.addEventListener("click", function () {
-        const overlay = gameElement.querySelector(".overlay");
-        if (overlay.style.display === "block") {
-          overlay.style.display = "none";
+      document.addEventListener("touchend", function (event) {
+        // 檢查被點擊的元素是否為 gameDiv 或其子元素
+        if (event.target.closest('.game')) {
+          // 顯示 overlayDiv
+          event.target.closest('.game').querySelector(".overlay").style.display = "block";
         } else {
-          overlay.style.display = "block";
+          // 隱藏 overlayDiv
+          gameElement.querySelector(".overlay").style.display = 'none';
         }
       });
 
@@ -123,11 +125,6 @@ fetch("https://api.t1league.basketball/season/2/matches").then(res => res.json()
     scheduleDiv.appendChild(gameElement);
   });
 });
-
-function overlaySetup() {
-
-}
-
 
 window.onload = function () {
   const scheduleToggle = document.createElement("div");
