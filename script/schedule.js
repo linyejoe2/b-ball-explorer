@@ -260,19 +260,34 @@ window.onload = async function () {
 
   const scheduleToggle = document.createElement("div");
 
-  scheduleToggle.classList.add("esri-component", "esri-home", "esri-widget--button", "esri-widget")
-  scheduleToggle.setAttribute("title", "關閉 T1 賽程");
+  scheduleToggle.classList.add("esri-component", "esri-home", "esri-widget--button", "esri-widget", "schedule-toggle")
+  scheduleToggle.setAttribute("title", "賽程選單");
 
-  const icon = document.createElement("img");
-  icon.src = "img/team/t1leagueoutline.svg";
-  icon.alt = "Toggle Schedule";
-  icon.style.width = "16px";
-  icon.style.height = "16px";
-  scheduleToggle.appendChild(icon);
+  scheduleToggle.innerHTML = '<div class="toggle-point"><div class="schedule-toggle-btn"></div></div>'
 
-  scheduleToggle.onclick = function () {
-    const scheduleDiv = document.querySelector(".schedule-box");
-    scheduleDiv.style.display = scheduleDiv.style.display === "none" ? "block" : "none";
+  const scheduleChoiseList = document.createElement("div");
+  scheduleChoiseList.innerText = 'sadfjasf';
+  scheduleChoiseList.style.display = "none";
+  scheduleToggle.appendChild(scheduleChoiseList);
+
+  scheduleToggle.querySelector('.toggle-point').onclick = function () {
+      const scheduleDiv = document.querySelector(".schedule-box");
+      scheduleDiv.style.display = scheduleDiv.style.display === "none" ? "block" : "none";
+  
+    // const scheduleDivList = document.querySelectorAll(".t1-bg");
+    // scheduleDivList.forEach(ele => ele.style.display = ele.style.display === "none" ? "inline-block" : "none");
+
+    if (scheduleToggle.classList.contains("active") === true) {
+      scheduleToggle.classList.add("close");
+      scheduleToggle.classList.remove("active");
+    } else {
+      scheduleToggle.classList.add("active");
+      scheduleToggle.classList.remove("close");
+    }
+
+    scheduleToggle.addEventListener("transitionend", (event) => {
+      scheduleChoiseList.style.display = scheduleChoiseList.style.display === "none" ? "inline-block" : "none";
+    });
   };
 
   document.querySelector(".esri-ui-top-left").appendChild(scheduleToggle);
