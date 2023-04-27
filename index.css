@@ -123,7 +123,7 @@ canvas {
   height: 100%;
   opacity: 0.1;
   /* background-color: #fff; */
-  background-image:url(/img/team/t1league.png);
+  background-image: url(/b-ball-explorer/img/team/t1league.png), url(/img/team/t1league.png);
   background-position: center center;
   background-repeat: no-repeat;
 }
@@ -138,7 +138,7 @@ canvas {
   height: 100%;
   opacity: 0.1;
   /* background-color: #fff; */
-  background-image:url(/img/team/sbl.png);
+  background-image: url(img/team/sbl.png);
   background-position: center center;
   background-repeat: no-repeat;
 }
@@ -153,7 +153,7 @@ canvas {
   height: 100%;
   opacity: 0.1;
   /* background-color: #fff; */
-  background-image:url(/img/team/wsbl-black.png);
+  background-image: url(img/team/wsbl-black.png);
   background-position: center center;
   background-repeat: no-repeat;
 }

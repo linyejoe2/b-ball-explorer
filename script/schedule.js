@@ -254,6 +254,13 @@ async function setSchedule() {
 };
 
 window.onload = async function () {
+
+  // 顯示載入中提示
+  const loadingDiv = document.createElement("div");
+  loadingDiv.textContent = "載入中...";
+  loadingDiv.className = "loading"
+  document.body.appendChild(loadingDiv);
+  
   await setSchedule();
 
   const scheduleToggle = document.createElement("div");
@@ -301,6 +308,10 @@ window.onload = async function () {
   };
 
   document.querySelector(".esri-ui-top-left").appendChild(scheduleToggle);
+
+
+  // 移除載入中提示
+  loadingDiv.remove();
 };
 
 window.checkScheduleToggle = function checkScheduleToggle() {
@@ -309,4 +320,3 @@ window.checkScheduleToggle = function checkScheduleToggle() {
   document.querySelectorAll(".sbl-bg").forEach(ele => ele.style.display = document.getElementById('sblToggle').checked ? "inline-block" : "none");
   document.querySelectorAll(".wsbl-bg").forEach(ele => ele.style.display = document.getElementById('wsblToggle').checked ? "inline-block" : "none");
 }
-
