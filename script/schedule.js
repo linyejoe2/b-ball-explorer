@@ -1,8 +1,6 @@
 import { view } from '../index.js';
 import { getCourtLocation } from './const.js';
 
-
-
 async function getT1Schedule() {
   return new Promise((res, err) => {
     const T1Schedule = [];
@@ -260,21 +258,55 @@ window.onload = async function () {
 
   const scheduleToggle = document.createElement("div");
 
-  scheduleToggle.classList.add("esri-component", "esri-home", "esri-widget--button", "esri-widget")
-  scheduleToggle.setAttribute("title", "關閉 T1 賽程");
+  scheduleToggle.classList.add("esri-component", "esri-home", "esri-widget--button", "esri-widget", "schedule-toggle")
+  scheduleToggle.setAttribute("title", "賽程選單");
 
-  const icon = document.createElement("img");
-  icon.src = "img/team/t1leagueoutline.svg";
-  icon.alt = "Toggle Schedule";
-  icon.style.width = "16px";
-  icon.style.height = "16px";
-  scheduleToggle.appendChild(icon);
+  scheduleToggle.innerHTML = '<div class="toggle-point"></div><div class="schedule-toggle-btn"></div>'
 
-  scheduleToggle.onclick = function () {
-    const scheduleDiv = document.querySelector(".schedule-box");
-    scheduleDiv.style.display = scheduleDiv.style.display === "none" ? "block" : "none";
+  const scheduleChoiseList = document.createElement("div");
+  scheduleChoiseList.classList.add("schedule-toggle-list");
+  scheduleChoiseList.innerHTML = `
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="t1LeagueToggle" checked onchange='checkScheduleToggle()'>
+    <label class="form-check-label" for="t1LeagueToggle">
+      T1 聯盟
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="sblToggle" checked onchange='checkScheduleToggle()'>
+    <label class="form-check-label" for="sblToggle">
+      SBL
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="wsblToggle" checked onchange='checkScheduleToggle()'>
+    <label class="form-check-label" for="wsblToggle">
+      WSBL
+    </label>
+  </div>
+  `;
+  scheduleToggle.appendChild(scheduleChoiseList);
+
+  scheduleToggle.querySelector('.toggle-point').onclick = function () {
+    // const scheduleDivList = document.querySelectorAll(".t1-bg");
+    // scheduleDivList.forEach(ele => ele.style.display = ele.style.display === "none" ? "inline-block" : "none");
+
+    if (scheduleToggle.classList.contains("active") === true) {
+      scheduleToggle.classList.add("close");
+      scheduleToggle.classList.remove("active");
+    } else {
+      scheduleToggle.classList.add("active");
+      scheduleToggle.classList.remove("close");
+    }
   };
 
   document.querySelector(".esri-ui-top-left").appendChild(scheduleToggle);
 };
+
+window.checkScheduleToggle = function checkScheduleToggle() {
+  console.log("asdf");
+  document.querySelectorAll(".t1-bg").forEach(ele => ele.style.display = document.getElementById('t1LeagueToggle').checked ? "inline-block" : "none");
+  document.querySelectorAll(".sbl-bg").forEach(ele => ele.style.display = document.getElementById('sblToggle').checked ? "inline-block" : "none");
+  document.querySelectorAll(".wsbl-bg").forEach(ele => ele.style.display = document.getElementById('wsblToggle').checked ? "inline-block" : "none");
+}
 
