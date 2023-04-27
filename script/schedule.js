@@ -254,13 +254,6 @@ async function setSchedule() {
 };
 
 window.onload = async function () {
-
-  // 顯示載入中提示
-  const loadingDiv = document.createElement("div");
-  loadingDiv.textContent = "載入中...";
-  loadingDiv.className = "loading"
-  document.body.appendChild(loadingDiv);
-  
   await setSchedule();
 
   const scheduleToggle = document.createElement("div");
@@ -311,7 +304,13 @@ window.onload = async function () {
 
 
   // 移除載入中提示
-  loadingDiv.remove();
+  document.querySelector(".loading").remove();
+  //   // 顯示載入中提示remove()
+  //   const loadingDiv = document.createElement("div");
+  //   loadingDiv.textContent = "載入中...";
+  //   loadingDiv.className = "loading"
+  //   document.body.appendChild(loadingDiv);
+  // loadingDiv.remove();
 };
 
 window.checkScheduleToggle = function checkScheduleToggle() {

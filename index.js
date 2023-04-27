@@ -193,9 +193,6 @@ require([
       featureLayer.applyEdits({
         addFeatures: graphArr
       });
-
-      // 移除載入中提示
-      loadingDiv.remove();
     });
 
   // // 創建一個 Search widget
