@@ -1,20 +1,40 @@
 .schedule-toggle {
   transition: width 1s, height 1s;
+  position: relative;
   display: block;
   padding-top: 16px;
   padding-left: 8px;
+  cursor: default;
+}
+
+.schedule-toggle-list {
+  padding-top: 20px;
 }
 
 .toggle-point {
-  height: 20px;
-  width: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 40px;
+  z-index: 70;
+  cursor: pointer;
 }
 
-/* .schedule-toggle.active {
-  transition: width 1s, height 1s;
-  width: 90px;
-  height: 200px;
-} */
+.schedule-toggle .form-check-label {
+  line-height: 100%;
+  vertical-align: bottom;
+}
+
+.schedule-toggle .form-check-input:checked {
+  background-color: #aaa;
+  border-color: #aaa;
+}
+
+.schedule-toggle.active {
+  width: 100px;
+  height: 120px;
+}
 
 .schedule-toggle-btn {
   width: 16px;
@@ -27,7 +47,7 @@
 
 .schedule-toggle.active .schedule-toggle-btn {
   background-color: transparent;
-  transition: background-color .01s .2s;
+  /* transition: background-color .01s .2s; */
 }
 
 .schedule-toggle-btn::before {
