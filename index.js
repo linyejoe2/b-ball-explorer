@@ -157,10 +157,10 @@ require([
   map.add(featureLayer);
 
   // 顯示載入中提示
-  const loadingDiv = document.createElement("div");
-  loadingDiv.textContent = "載入中...";
-  loadingDiv.className = "loading"
-  document.body.appendChild(loadingDiv);
+  // const loadingDiv = document.createElement("div");
+  // loadingDiv.textContent = "載入中...";
+  // loadingDiv.className = "loading"
+  // document.body.appendChild(loadingDiv);
 
   // // 呼叫 api 取得籃球場資料，並將資料轉成 Graphics 顯示在地圖上
   fetch("https://script.google.com/macros/s/AKfycbz8dfD4bGT6NYSls3LOfsr6Gz3b3Fm3iJUyI8o_Z-axrSsQtyFhXASHoz3GZU0XkklgPw/exec")

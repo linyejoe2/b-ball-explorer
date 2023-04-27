@@ -38,12 +38,39 @@ canvas {
 }
 
 .loading {
+  z-index: 50;
   position: fixed;
   font-size: 30px;
   top: 50%;
   left: 50%;
   /* transform: translate(-50%, -50%); */
-  animation: jump 1s infinite;
+  animation: jump .5s alternate infinite cubic-bezier(.5, 0.05, 1, .5);
+}
+
+.rotateLoading {
+  animation: rotateLoading 3s infinite linear;
+}
+
+@keyframes rotateLoading {
+  20% {
+    transform: rotate(0deg);
+  }
+
+  80% {
+    transform: rotate(-4deg);
+  }
+
+  85% {
+    transform: rotate(0deg);
+  }
+
+  90% {
+    transform: rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(1080deg);
+  }
 }
 
 @keyframes jump {
@@ -51,18 +78,8 @@ canvas {
     transform: translate(-50%, -80%);
   }
 
-  /* 20% {
-    transform: translate(-50%, -30%);
-  } */
-  50% {
-    transform: translate(-50%, -30%);
-  }
-
-  /* 80% {
-    transform: translate(-50%, -30%);
-  } */
   100% {
-    transform: translate(-50%, -80%);
+    transform: translate(-50%, -30%);
   }
 }
 
