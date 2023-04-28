@@ -251,6 +251,18 @@ async function setSchedule() {
   schedule.forEach(ele => {
     scheduleDiv.appendChild(ele[2]);
   });
+
+  scheduleDiv.addEventListener('wheel', event => {
+    event.preventDefault();
+    scheduleDiv.scrollLeft += event.deltaY;
+
+    // event.shiftKey = true;
+    console.log("asdf");
+    // if (event.shiftKey) {
+    //   event.preventDefault();
+    //   schedule.scrollLeft += event.deltaY;
+    // }
+  });
 };
 
 window.onload = async function () {
@@ -302,15 +314,8 @@ window.onload = async function () {
 
   document.querySelector(".esri-ui-top-left").appendChild(scheduleToggle);
 
-
   // 移除載入中提示
   document.querySelector(".loading").remove();
-  //   // 顯示載入中提示remove()
-  //   const loadingDiv = document.createElement("div");
-  //   loadingDiv.textContent = "載入中...";
-  //   loadingDiv.className = "loading"
-  //   document.body.appendChild(loadingDiv);
-  // loadingDiv.remove();
 };
 
 window.checkScheduleToggle = function checkScheduleToggle() {
