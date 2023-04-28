@@ -176,12 +176,26 @@ canvas {
 }
 
 .game .date {
+  display: inline-block;
   font-size: 18px;
   line-height: 22px;
   letter-spacing: 0;
   font-family: "Satoshi", "Noto Sans TC";
   font-weight: 700;
   margin-bottom: 5px;
+}
+
+.game .may-not-play {
+  display: inline-block;
+  margin-left: 20px;
+  /* background: #dadada;
+  padding: 5px 3px; */
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0;
+  font-family: "Satoshi", "Noto Sans TC";
+  font-weight: 400;
+  color: rgb(47, 47, 47);
 }
 
 .game .game-id,

@@ -1,5 +1,34 @@
-import { view } from '../index.js';
+import { view, map } from '../index.js';
 import { getCourtLocation } from './const.js';
+
+function getFeature(stadiumName) {
+  let layer = map.findLayerById("bBallLayer");
+  let query = layer.createQuery();
+  query.where = `name = '${stadiumName}'`;
+
+  layer.queryFeatures(query).then((result) => {
+    if (result.features.length > 0) {
+      const feature = result.features[0];
+      // 將視圖定位到該圖徵
+      view.goTo({
+        target: feature.geometry,
+        zoom: 15
+      }, { duration: 2000 }).then(() => {
+
+        // 取得圖徵屬性中包含的 PopupTemplate 內容
+        let content = feature.sourceLayer.popupTemplate.content;
+
+        // 在視圖中顯示 Popup
+        view.popup.open({
+          location: feature.geometry,  // location of the click on the view
+          fetchFeatures: true // display the content for the selected feature if a popupTemplate is defined.
+        });
+      });
+    } else {
+      console.log("地點未定!")
+    }
+  });
+}
 
 async function getT1Schedule() {
   return new Promise((res, err) => {
@@ -25,12 +54,14 @@ async function getT1Schedule() {
         const gameNumberElement = document.createElement('div');
         const teamElement = document.createElement('div');
         const locationElement = document.createElement('div');
+        const mayNotPlayElement = document.createElement('div');
 
         // 設定 HTML 元素內容
         dateElement.textContent = date ? `${date} ${time}` : "時間未定";
         gameNumberElement.textContent = `${gameType} Game ${gameNumber}`;
-        teamElement.textContent = `${homeTeam} vs ${guestTeam}`;
+        teamElement.textContent = game.preArrangeGame ? `${game.preArrangeTeamHomeName} vs ${game.preArrangeTeamGuestName}` : `${homeTeam} vs ${guestTeam}`;
         locationElement.textContent = location ? `at ${location}` : "地點未定";
+        mayNotPlayElement.textContent = game.mayNotPlay ? "可能不打" : "";
 
         // 加入 CSS class
         gameElement.classList.add('game', "t1-bg");
@@ -38,6 +69,7 @@ async function getT1Schedule() {
         gameNumberElement.classList.add('game-id');
         teamElement.classList.add('team');
         locationElement.classList.add('location');
+        mayNotPlayElement.classList.add('may-not-play');
 
         // 設定跟 overlay 有關的東西
         (() => {
@@ -92,10 +124,7 @@ async function getT1Schedule() {
 
           // 左邊地圖點擊事件
           gameElement.querySelector(".map-col").onclick = (ele, ele2) => {
-            view.goTo({
-              center: getCourtLocation(location),
-              zoom: 15
-            }, { duration: 2000 });
+            getFeature(location);
           }
 
           // 右邊立即購票點集事件
@@ -108,6 +137,7 @@ async function getT1Schedule() {
 
         // 將 HTML 元素加入到 schedule div 裡
         gameElement.appendChild(dateElement);
+        gameElement.appendChild(mayNotPlayElement);
         gameElement.appendChild(gameNumberElement);
         gameElement.appendChild(teamElement);
         gameElement.appendChild(locationElement);
@@ -211,14 +241,7 @@ async function getSBLSchedule() {
 
           // 左邊地圖點擊事件
           gameElement.querySelector(".map-col").onclick = (ele, ele2) => {
-
-            let courtlocation = getCourtLocation(location);
-            if (!courtlocation) console.log("no court data: " + courtlocation);
-
-            view.goTo({
-              center: courtlocation,
-              zoom: 15
-            }, { duration: 2000 });
+            getFeature(location);
           }
 
           // 右邊立即購票點集事件
@@ -255,13 +278,6 @@ async function setSchedule() {
   scheduleDiv.addEventListener('wheel', event => {
     event.preventDefault();
     scheduleDiv.scrollLeft += event.deltaY;
-
-    // event.shiftKey = true;
-    console.log("asdf");
-    // if (event.shiftKey) {
-    //   event.preventDefault();
-    //   schedule.scrollLeft += event.deltaY;
-    // }
   });
 };
 

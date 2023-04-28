@@ -1,4 +1,4 @@
-let view;
+let view, map;
 
 require([
   "esri/Map",
@@ -15,7 +15,7 @@ require([
 ], function (Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapToggle, Popup, Home, Locate, LayerList, Search) {
 
   // 建立地圖
-  var map = new Map({
+  map = new Map({
     basemap: "gray-vector"
     // basemap: "dark-gray-vector", // 全黑，風格不錯
     // basemap: "oceans", // 土地是白的，方便看清楚其他資訊
@@ -61,6 +61,7 @@ require([
 
   // 建立 featureLayer 來顯示籃球場點位
   const featureLayer = new FeatureLayer({
+    id: "bBallLayer",
     fields: [{ name: "ObjectID", alias: "ObjectID", type: "oid" },
     { name: "name", alias: "名稱", type: "string" },
     { name: "address", alias: "地址", type: "string" },
@@ -156,13 +157,7 @@ require([
   });
   map.add(featureLayer);
 
-  // 顯示載入中提示
-  // const loadingDiv = document.createElement("div");
-  // loadingDiv.textContent = "載入中...";
-  // loadingDiv.className = "loading"
-  // document.body.appendChild(loadingDiv);
-
-  // // 呼叫 api 取得籃球場資料，並將資料轉成 Graphics 顯示在地圖上
+  // 呼叫 api 取得籃球場資料，並將資料轉成 Graphics 顯示在地圖上
   fetch("https://script.google.com/macros/s/AKfycbz8dfD4bGT6NYSls3LOfsr6Gz3b3Fm3iJUyI8o_Z-axrSsQtyFhXASHoz3GZU0XkklgPw/exec")
     .then(response => response.json())
     .then(data => {
@@ -262,4 +257,4 @@ require([
 
 });
 
-export { view };
+export { view, map };
