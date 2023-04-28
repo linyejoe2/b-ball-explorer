@@ -277,7 +277,7 @@ async function setSchedule() {
 
   scheduleDiv.addEventListener('wheel', event => {
     event.preventDefault();
-    scheduleDiv.scrollLeft += event.deltaY;
+    scheduleDiv.scrollLeft += event.deltaY / 2;
   });
 };
 
