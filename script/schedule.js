@@ -9,11 +9,20 @@ function getFeature(stadiumName) {
   layer.queryFeatures(query).then((result) => {
     if (result.features.length > 0) {
       const feature = result.features[0];
+
+      if (feature.geometry.latitude.toFixed(5) == view.center.latitude.toFixed(5) && feature.geometry.longitude.toFixed(5) == view.center.longitude.toFixed(5)) {
+        // 在視圖中顯示 Popup
+        return view.popup.open({
+          location: feature.geometry,  // location of the click on the view
+          fetchFeatures: true // display the content for the selected feature if a popupTemplate is defined.
+        });
+      }
+
       // 將視圖定位到該圖徵
       view.goTo({
         target: feature.geometry,
         zoom: 15
-      }, { duration: 2000 }).then(() => {
+      }, { duration: 2500, easing: "ease-out" }).then(() => {
 
         // 取得圖徵屬性中包含的 PopupTemplate 內容
         let content = feature.sourceLayer.popupTemplate.content;
